@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mydep
+spec: 
+   replicas: 3 
+   selector:
+     matchLabels:
+      app: myapp
+   template:
+      metadata:
+        labels:
+          app: myapp
+      spec:
+        containers:
+        - name: con1
+          image: nginx
+          ports:
+          - containerPort: 80 
+        - name: con2
+          image: tomcat:latest
+          ports:
+          - containerPort: 8080
+          resources:
+             requests:
+               memory: "64Mi"
+               cpu: "250m"
+             limits:
+                memory: "128Mi"
+                cpu: "1000m"
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mydep
+spec:
+  maxReplicas: 8
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mydep
+  targetCPUUtilizationPercentage: 80
