@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  tls:
+#  - hosts:
+#      - aneesh.com
+  - secretName: aneesh-com
+  rules:
+#  - host: aneesh.com
+  - http:
+      paths:
+      - path: /newapp
+        pathType: Prefix
+        backend:
+          service:
+            name: mydep
+            port:
+              number: 80
+
