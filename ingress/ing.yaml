@@ -18,7 +18,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: mydep
+            name: mypod
             port:
               number: 80
 
